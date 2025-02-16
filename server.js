@@ -5,23 +5,23 @@ const app = express();
 
 // Middleware
 app.use(express.json());
-app.use(express.static(__dirname));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Ana sayfa yönlendirmesi
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'documentation.html'));
+    res.sendFile(path.join(__dirname, 'public/documentation.html'));
 });
 
 // /docs/ altındaki sayfalar için yönlendirme
 app.get('/docs/:page', (req, res) => {
     const page = req.params.page;
-    res.sendFile(path.join(__dirname, 'docs', `${page}.html`));
+    res.sendFile(path.join(__dirname, 'public/docs', `${page}.html`));
 });
 
 // API Routes - Sadece içerik görüntüleme
 app.get('/api/contents', async (req, res) => {
     try {
-        const data = await fs.readFile(path.join(__dirname, 'data', 'contents.json'), 'utf8');
+        const data = await fs.readFile(path.join(__dirname, 'public/data/contents.json'), 'utf8');
         const contents = JSON.parse(data);
         res.json(contents);
     } catch (error) {
@@ -33,7 +33,7 @@ app.get('/api/contents', async (req, res) => {
 // Tekil içerik görüntüleme
 app.get('/api/contents/:id', async (req, res) => {
     try {
-        const data = await fs.readFile(path.join(__dirname, 'data', 'contents.json'), 'utf8');
+        const data = await fs.readFile(path.join(__dirname, 'public/data/contents.json'), 'utf8');
         const contents = JSON.parse(data);
         const content = contents.find(c => c.id === req.params.id);
         
@@ -50,8 +50,12 @@ app.get('/api/contents/:id', async (req, res) => {
 
 // Diğer tüm route'lar için ana sayfaya yönlendir
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'documentation.html'));
+    res.sendFile(path.join(__dirname, 'public/documentation.html'), (err) => {
+        if (err) {
+            console.error('Dosya gönderme hatası:', err);
+            res.status(500).send('Sayfa yüklenirken bir hata oluştu');
+        }
+    });
 });
 
-// Vercel için module.exports
 module.exports = app; 
