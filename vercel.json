@@ -16,27 +16,8 @@
       "dest": "/server.js"
     },
     {
-      "src": "^/styles.css",
-      "dest": "/public/styles.css"
-    },
-    {
-      "src": "^/script.js",
-      "dest": "/public/script.js"
-    },
-    {
-      "src": "^/logo.png",
-      "dest": "/public/logo.png"
-    },
-    {
-      "src": "^/data/(.*)",
-      "dest": "/public/data/$1"
-    },
-    {
-      "src": "^/docs/(.*)",
-      "dest": "/public/docs/$1"
-    },
-    {
-      "handle": "filesystem"
+      "src": "/(.+\\.[a-z]+)$",
+      "dest": "/public/$1"
     },
     {
       "src": "/(.*)",

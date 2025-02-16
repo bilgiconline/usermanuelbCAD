@@ -5,7 +5,7 @@ const app = express();
 
 // Middleware
 app.use(express.json());
-app.use(express.static('public'));
+app.use('/', express.static(path.join(__dirname, 'public')));
 
 // API Routes - İçerik görüntüleme
 app.get('/api/contents', async (req, res) => {
@@ -35,6 +35,11 @@ app.get('/api/contents/:id', async (req, res) => {
         console.error('İçerik okuma hatası:', error);
         res.status(500).json({ error: 'İçerik yüklenemedi' });
     }
+});
+
+// Tüm rotaları ana sayfaya yönlendir
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public/documentation.html'));
 });
 
 module.exports = app; 
