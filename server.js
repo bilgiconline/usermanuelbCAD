@@ -3,17 +3,25 @@ const path = require('path');
 const fs = require('fs').promises;
 const app = express();
 
-// Vercel için dosya sistemi yollarını düzenle
-const CONTENTS_FILE = path.join(process.cwd(), 'public/data/contents.json');
-
 // Middleware
 app.use(express.json());
-app.use(express.static('public'));
+app.use(express.static(__dirname));
+
+// Ana sayfa yönlendirmesi
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'documentation.html'));
+});
+
+// /docs/ altındaki sayfalar için yönlendirme
+app.get('/docs/:page', (req, res) => {
+    const page = req.params.page;
+    res.sendFile(path.join(__dirname, 'docs', `${page}.html`));
+});
 
 // API Routes - Sadece içerik görüntüleme
 app.get('/api/contents', async (req, res) => {
     try {
-        const data = await fs.readFile(CONTENTS_FILE, 'utf8');
+        const data = await fs.readFile(path.join(__dirname, 'data', 'contents.json'), 'utf8');
         const contents = JSON.parse(data);
         res.json(contents);
     } catch (error) {
@@ -25,7 +33,7 @@ app.get('/api/contents', async (req, res) => {
 // Tekil içerik görüntüleme
 app.get('/api/contents/:id', async (req, res) => {
     try {
-        const data = await fs.readFile(CONTENTS_FILE, 'utf8');
+        const data = await fs.readFile(path.join(__dirname, 'data', 'contents.json'), 'utf8');
         const contents = JSON.parse(data);
         const content = contents.find(c => c.id === req.params.id);
         
@@ -40,17 +48,10 @@ app.get('/api/contents/:id', async (req, res) => {
     }
 });
 
-// Ana sayfa ve diğer route'lar için
+// Diğer tüm route'lar için ana sayfaya yönlendir
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'documentation.html'));
+    res.sendFile(path.join(__dirname, 'documentation.html'));
 });
 
 // Vercel için module.exports
-if (process.env.VERCEL) {
-    module.exports = app;
-} else {
-    const port = process.env.PORT || 3000;
-    app.listen(port, () => {
-        console.log(`Server running on port ${port}`);
-    });
-} 
+module.exports = app; 
