@@ -1,26 +1,16 @@
 const express = require('express');
 const path = require('path');
-const multer = require('multer');
 const fs = require('fs').promises;
 const app = express();
 
 // Vercel için dosya sistemi yollarını düzenle
 const CONTENTS_FILE = path.join(process.cwd(), 'public/data/contents.json');
 
-// Multer ayarları - Vercel için in-memory storage kullan
-const storage = multer.memoryStorage();
-const upload = multer({ 
-    storage: storage,
-    limits: {
-        fileSize: 5 * 1024 * 1024 // 5MB limit
-    }
-});
-
 // Middleware
 app.use(express.json());
 app.use(express.static('public'));
 
-// API Routes
+// API Routes - Sadece içerik görüntüleme
 app.get('/api/contents', async (req, res) => {
     try {
         const data = await fs.readFile(CONTENTS_FILE, 'utf8');
@@ -32,12 +22,30 @@ app.get('/api/contents', async (req, res) => {
     }
 });
 
-// Diğer route'lar için catch-all
+// Tekil içerik görüntüleme
+app.get('/api/contents/:id', async (req, res) => {
+    try {
+        const data = await fs.readFile(CONTENTS_FILE, 'utf8');
+        const contents = JSON.parse(data);
+        const content = contents.find(c => c.id === req.params.id);
+        
+        if (!content) {
+            return res.status(404).json({ error: 'İçerik bulunamadı' });
+        }
+        
+        res.json(content);
+    } catch (error) {
+        console.error('İçerik okuma hatası:', error);
+        res.status(500).json({ error: 'İçerik yüklenemedi' });
+    }
+});
+
+// Ana sayfa ve diğer route'lar için
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'documentation.html'));
 });
 
-// Vercel için module.exports ekle
+// Vercel için module.exports
 if (process.env.VERCEL) {
     module.exports = app;
 } else {
