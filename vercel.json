@@ -16,20 +16,27 @@
       "dest": "/server.js"
     },
     {
-      "src": "/styles.css",
+      "src": "^/styles.css",
       "dest": "/public/styles.css"
     },
     {
-      "src": "/script.js",
+      "src": "^/script.js",
       "dest": "/public/script.js"
     },
     {
-      "src": "/logo.png",
+      "src": "^/logo.png",
       "dest": "/public/logo.png"
     },
     {
-      "src": "/docs/(.*)",
+      "src": "^/data/(.*)",
+      "dest": "/public/data/$1"
+    },
+    {
+      "src": "^/docs/(.*)",
       "dest": "/public/docs/$1"
+    },
+    {
+      "handle": "filesystem"
     },
     {
       "src": "/(.*)",
