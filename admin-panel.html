@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>İçerik Yönetimi - CAD Uygulama Kılavuzu</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="admin-styles.css">
+    <script src="https://cdn.tiny.cloud/1/i1ef88ua2x4bs6j9gtt7aehe5kaubcod4irp0td7c0k81fb7/tinymce/6/tinymce.min.js"></script>
+    <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/langs/tr.js"></script>
+    <script src="admin.js"></script>
+</head>
+<body>
+    <div class="admin-panel">
+        <div class="admin-header">
+            <h1>İçerik Yönetimi</h1>
+            <button class="new-content-btn">+ Yeni İçerik</button>
+        </div>  
+        
+        <div class="content-list">
+            <!-- İçerikler listelenecek -->
+        </div>
+    </div>
+
+    <!-- İçerik düzenleme modalı -->
+    <div class="edit-modal">
+        <div class="modal-content">
+            <!-- Sol Panel - Düzenleme -->
+            <div class="edit-panel">
+                <form id="contentForm">
+                    <div class="form-header">
+                        <div class="form-group">
+                            <label for="title">Başlık</label>
+                            <input type="text" name="title" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="category">Kategori</label>
+                            <select name="category" required>
+                                <option value="baslangic">🎯 Başlangıç</option>
+                                <option value="temel-cizimler">📝 Temel Çizimler</option>
+                                <option value="kopyalama">🔄 Kopyalama İşlemleri</option>
+                                <option value="araclar">🔧 Araçlar</option>
+                                <option value="ipuclari">�� İpuçları</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="editor-container">
+                        <div class="form-group">
+                            <label for="editor">İçerik</label>
+                            <textarea id="editor" name="content"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="template-section">
+                        <h3>Hızlı Şablonlar</h3>
+                        <div class="template-selector">
+                            <div class="template-item" data-template="basic">
+                                <h4>Temel Sayfa</h4>
+                                <p>Boş sayfa şablonu</p>
+                            </div>
+                            <div class="template-item" data-template="quickstart">
+                                <h4>Hızlı Başlangıç</h4>
+                                <p>Adım adım kılavuz</p>
+                            </div>
+                            <div class="template-item" data-template="feature">
+                                <h4>Özellik Tanıtımı</h4>
+                                <p>Özellik kartları ile açıklama</p>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Sağ Panel - Önizleme -->
+            <div class="preview-panel">
+                <div class="preview-header">
+                    <h3>Önizleme</h3>
+                    <div class="preview-toggle">
+                        <button class="active" data-view="desktop">🖥️ Masaüstü</button>
+                        <button data-view="tablet">📱 Tablet</button>
+                        <button data-view="mobile">📱 Mobil</button>
+                    </div>
+                </div>
+                <div class="preview-content">
+                    <!-- Önizleme içeriği buraya gelecek -->
+                </div>
+            </div>
+
+            <!-- Modal Butonları -->
+            <div class="modal-actions">
+                <button class="cancel-btn">İptal</button>
+                <button type="submit" form="contentForm" class="save-btn">Kaydet</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal içeriğinin hemen üstüne ekleyin -->
+    <button class="theme-toggle" id="themeToggle" title="Tema Değiştir">
+        🌓
+    </button>
+</body>
+</html> 
